@@ -1,0 +1,106 @@
+﻿@using BatchMonitoringSystem.ViewModels;
+@model ProductDto
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h1>Create Product</h1>
+
+<form asp-action="CreateProduct" method="post">
+    <div class="form-group">
+        <label asp-for="ProductName"></label>
+        <input asp-for="ProductName" class="form-control" />
+        <span asp-validation-for="ProductName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductCode"></label>
+        <input asp-for="ProductCode" class="form-control" />
+        <span asp-validation-for="ProductCode" class="text-danger"></span>
+    </div>
+
+    <div id="parameters-container">
+        @for (int i = 0; i < Model.Parameters.Count; i++)
+        {
+            <div class="row mb-3 parameter-group" data-index="@i">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="@Model.Parameters[i].ParameterName" class="form-label"></label>
+                        <input asp-for="@Model.Parameters[i].ParameterName" class="form-control" />
+                        <span asp-validation-for="@Model.Parameters[i].ParameterName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="@Model.Parameters[i].MinValue" class="form-label"></label>
+                        <input asp-for="@Model.Parameters[i].MinValue" class="form-control" />
+                        <span asp-validation-for="@Model.Parameters[i].MinValue" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="@Model.Parameters[i].MaxValue" class="form-label"></label>
+                        <input asp-for="@Model.Parameters[i].MaxValue" class="form-control" />
+                        <span asp-validation-for="@Model.Parameters[i].MaxValue" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-auto align-self-end">
+                    <button type="button" class="btn btn-danger remove-parameter">Remove</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="button" id="add-parameter" class="btn btn-primary">Add Parameter</button>
+    <br /><br />
+    <button type="submit" class="btn btn-success">Save Product</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const parametersContainer = document.getElementById('parameters-container');
+            const addParameterButton = document.getElementById('add-parameter');
+
+            addParameterButton.addEventListener('click', function () {
+                const index = parametersContainer.children.length;
+                const parameterHtml = `
+                                    <div class="row mb-3 parameter-group" data-index="${index}">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Parameter Name</label>
+                                                <input name="Parameters[${index}].ParameterName" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Min Value</label>
+                                                <input name="Parameters[${index}].MinValue" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Max Value</label>
+                                                <input name="Parameters[${index}].MaxValue" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-auto align-self-end">
+                                            <button type="button" class="btn btn-danger remove-parameter">Remove</button>
+                                        </div>
+                                    </div>
+                                `;
+                parametersContainer.insertAdjacentHTML('beforeend', parameterHtml);
+            });
+
+            parametersContainer.addEventListener('click', function (event) {
+                if (event.target.classList.contains('remove-parameter')) {
+                    event.target.closest('.parameter-group').remove();
+                }
+            });
+        });
+    </script>
+}

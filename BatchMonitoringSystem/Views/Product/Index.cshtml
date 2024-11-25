@@ -1,0 +1,47 @@
+﻿@using BatchMonitoringSystem.Models
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Product Index";
+}
+
+<h1>Product List</h1>
+
+<p>
+    <a asp-action="CreateProduct" class="btn btn-primary">Create New Product</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Product Code</th>
+            <th>Parameters</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.ProductCode</td>
+                <td>
+                    <ul>
+                        @foreach (var param in product.Parameters)
+                        {
+                            <li>
+                                @param.ParameterName: @param.MinValue - @param.MaxValue
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="UpdateProduct" asp-route-id="@product.ProductId" class="btn btn-warning">Edit</a>                  
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

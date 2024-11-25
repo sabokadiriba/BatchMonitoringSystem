@@ -1,0 +1,64 @@
+@using BatchMonitoringSystem.ViewModels
+@model BackupReportModel
+
+@{
+    ViewData["Title"] = "Backup Report";
+}
+<h2>Backup Report</h2>
+<form method="get" action="@Url.Action("BackupReport", "Reports")" class="row mb-4">
+    <div class="col-md-3 form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-3 form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-2 form-group">
+        <button type="submit" class="btn btn-success mt-4">Filter <i class="fa fa-filter"></i></button>
+    </div>
+    <div class="col-md-2 form-group">
+        <a href="@Url.Action("ExportBackupToExcel", "Reports", new { startDate = Model.StartDate, endDate = Model.EndDate })" class="btn btn-info mt-4">Export to Excel <i class="fa fa-file-excel"></i></a>
+    </div>
+</form>
+
+@if (Model.BackupLogs.Any())
+{
+    <div class="table-responsive">
+    <table class="table table-bordered table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Backup Date</th>
+                <th>Equipment ID</th>
+                <th>Folder Name</th>
+                <th>Local Destination</th>
+                <th>Remote Destination</th>
+                <th>Number of Unique Batches</th>
+                <th>Number of Duplicate Batches</th>
+                <th>Total Number of Batches</th>
+                <th>Backup User</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.BackupLogs)
+            {
+                <tr>
+                    <td>@log.BackupDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@log.EquipmentId</td>
+                    <td>@log.FolderName</td>
+                    <td>@log.LocalDestinationPath</td>
+                    <td>@log.RemoteDestinationPath</td>
+                    <td>@log.NumberOfUniqueBatches</td>
+                    <td>@log.NumberOfDuplicateBatches</td>
+                    <td>@log.TotalNumberOfBatches</td>
+                    <td>@log.BackupUser</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+   </div>
+}
+else
+{
+    <p>No backup logs found for the selected date range.</p>
+}

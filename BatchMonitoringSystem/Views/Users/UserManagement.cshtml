@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BatchMonitoringSystem.Models
+@model List<ViewUserViewModel>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<!-- /.row -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table id="myDataTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                           
+                            <th>User Id</th>
+                            <th>Name</th>
+                            <th>Roles</th>
+                            <th>Modify</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                           
+                            <tr>
+                               
+                                <td>@user.UserId</td>
+                                 <td>@user.Name</td>
+                               
+                                <td>
+                                   @foreach( var role in @ViewBag.Roles ){
+                                        <span>@role </span>
+                                   };
+                                </td>
+                                <td>
+                                    <a class="btn btn-info" asp-action="UserDetails" asp-route-id="@user.Id">Modify</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include any additional scripts needed here -->
+}

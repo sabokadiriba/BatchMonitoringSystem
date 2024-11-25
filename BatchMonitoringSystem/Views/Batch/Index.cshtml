@@ -1,0 +1,42 @@
+﻿@using BatchMonitoringSystem.Models
+@model IEnumerable<Batch>
+
+@{
+    ViewData["Title"] = "Batch Index";
+}
+
+<h1>Batch List</h1>
+
+<p>
+    <a asp-action="CreateBatch" class="btn btn-primary">Create New Batch</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+
+            <th>Product</th>
+            <th>Equipment</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Comments</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var batch in Model)
+        {
+            <tr>
+                <td>@batch.BatchId</td>
+                <td>@batch.Product.ProductName</td>
+                <td>@batch.Equipment.EquipmentName</td>
+                <td>@batch.BatchStartTime</td>
+                <td>@batch.BatchEndTime</td>
+                <td>@batch.Comments</td>
+              
+             
+            </tr>
+        }
+    </tbody>
+</table>

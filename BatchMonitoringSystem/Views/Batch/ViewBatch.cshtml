@@ -1,0 +1,112 @@
+﻿@model Batch
+@using System.Text.Json
+
+@{
+    var batchParameters = Model.BatchParameters.Select(bp => new
+    {
+        ParameterName = bp.ParameterName,
+        ActualValues = JsonSerializer.Deserialize<List<double>>(bp.ActualValuesJson) ?? new List<double>(),
+        MinValue = bp.MinValue,
+        MaxValue = bp.MaxValue
+    }).ToList();
+
+    var serializedBatchParameters = JsonSerializer.Serialize(batchParameters);
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Batch Details</h2>
+
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Start Time:</strong> @Model.BatchStartTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        <p class="mb-1"><strong>End Time:</strong> @Model.BatchEndTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        <p class="mb-3"><strong>Comment:</strong> @Model.Comments</p>
+                        <p class="mb-3"><strong>Product:</strong> @Model.Product.ProductName</p>
+                        <p class="mb-3"><strong>Equipment:</strong> @Model.Equipment.EquipmentName</p>
+                        @if (Model.BatchStatus == BatchStatus.Passed)
+                        {
+                            <p class="mb-3 text-success"><strong>Status:</strong> @Model.BatchStatus</p>
+                        }
+                        else if (Model.BatchStatus == BatchStatus.Failed)
+                        {
+                            <p class="mb-3 text-danger"><strong>Status:</strong> @Model.BatchStatus</p>
+                        }
+                        else
+                        {
+                            <p class="mb-3 text-danger"><strong>Status:</strong> @Model.BatchStatus</p>
+                        }
+                    </div>
+
+                    @if (Model.BatchStatus == BatchStatus.Pending)
+                    {
+                        <form asp-action="UpdateBatchStatus" method="post">
+                            <input type="hidden" name="batchId" value="@Model.BatchId" />
+                            <button type="submit" class="btn btn-success w-100">Update Status</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <canvas id="batchParametersChart" width="400" height="200"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        var batchData = @Html.Raw(serializedBatchParameters);
+
+                        var ctx = document.getElementById('batchParametersChart').getContext('2d');
+
+                        var datasets = batchData.map(param => ({
+                            label: param.ParameterName,
+                            data: param.ActualValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }));
+
+                        // Add Min and Max lines for each parameter
+                        var minMaxDatasets = batchData.flatMap(param => [
+                            {
+                                label: `${param.ParameterName} Min Value`,
+                                data: new Array(param.ActualValues.length).fill(param.MinValue),
+                                type: 'line',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                fill: false
+                            },
+                            {
+                                label: `${param.ParameterName} Max Value`,
+                                data: new Array(param.ActualValues.length).fill(param.MaxValue),
+                                type: 'line',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                fill: false
+                            }
+                        ]);
+
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: batchData.flatMap(param => param.ActualValues.map((_, i) => `Sample ${i + 1}`)),
+                                datasets: [...datasets, ...minMaxDatasets]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

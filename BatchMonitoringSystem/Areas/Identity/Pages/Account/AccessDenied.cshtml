@@ -1,0 +1,30 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+        <div class="alert alert-danger text-center">
+            <h1 class="display-4">@ViewData["Title"]</h1>
+            <p class="lead">You do not have access to this resource.</p>
+            <hr class="my-4">
+            <p>If you believe this is an error, please contact your administrator.</p>
+            <a class="btn btn-primary" href="/" role="button">Return to Home</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@using BatchMonitoringSystem.ViewModels
+@model ProductReportModel
+
+@{
+    ViewData["Title"] = "Product Report";
+}
+
+<h2>Product Report</h2>
+
+<form method="get" action="@Url.Action("ExportProductsToPdf", "Reports")" class="row mb-4">
+    <div class="col-md-3 form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-3 form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-2 form-group">
+        <button type="submit" class="btn btn-success mt-4">Filter <i class="fa fa-filter"></i></button>
+    </div>
+    <div class="col-md-2 form-group">
+        <a href="@Url.Action("ExportProductsToPdf", "Reports", new { startDate = Model.StartDate, endDate = Model.EndDate })" class="btn btn-info mt-4">Export to Excel <i class="fa fa-file-excel"></i></a>
+    </div>
+</form>
+
+
+
+<h3>Products</h3>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Product Code</th>
+            <th>Created At</th>
+            <th>Product Parameters</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.ProductCode</td>
+                <td>@product.CreatedAt.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <ul>
+                        @foreach (var param in product.Parameters)
+                        {
+                            <li>@param.ParameterName: @param.MinValue - @param.MaxValue</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

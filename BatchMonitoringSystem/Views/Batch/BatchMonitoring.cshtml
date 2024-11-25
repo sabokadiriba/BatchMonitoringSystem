@@ -1,0 +1,96 @@
+﻿@using BatchMonitoringSystem.ViewModels
+@model BatchFilterViewModel
+
+@{
+    ViewData["Title"] = "Batch Status Monitoring";
+}
+
+<div class="container mt-5">
+    <h2>@ViewData["Title"]</h2>
+
+    <form id="filterForm" asp-action="UpdateBatchStatus" method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-4">
+                    <label for="equipmentSelect" class="form-label">Select Equipment</label>
+                    <select id="equipmentSelect" name="SelectedEquipmentId" class="form-select" asp-items="Model.EquipmentList">
+                        <option value="">-- Select Equipment --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-4">
+                    <label for="productSelect" class="form-label">Select Product</label>
+                    <select id="productSelect" name="SelectedProductId" class="form-select" asp-items="Model.ProductList">
+                        <option value="">-- Select Product --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-4">
+                    <label for="batchSelect" class="form-label">Select Batch</label>
+                    <select id="batchSelect" name="SelectedBatchId" class="form-select" asp-items="Model.BatchList">
+                        <option value="">-- Select Batch --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden input field for batch ID -->
+        <input type="hidden" id="batchId" name="batchId" value="@Model.SelectedBatchId" />
+
+        <div class="mb-4">
+            <button type="submit" class="btn btn-primary">Monitor</button>
+        </div>
+    </form>
+
+    @if (Model.SelectedBatch != null)
+    {
+        <div class="mt-5">
+            <h3>Batch Details</h3>
+            <p><strong>Batch ID:</strong> @Model.SelectedBatch.BatchId</p>
+            <p><strong>Start Time:</strong> @Model.SelectedBatch.BatchStartTime</p>
+            <p><strong>End Time:</strong> @Model.SelectedBatch.BatchEndTime</p>
+            <p><strong>Status:</strong> @Model.SelectedBatch.BatchStatus</p>
+            <p><strong>Product:</strong> @Model.SelectedBatch.Product.ProductName</p>
+            <p><strong>Equipment:</strong> @Model.SelectedBatch.Equipment.EquipmentName</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#equipmentSelect, #productSelect').change(function () {
+                var equipmentId = $('#equipmentSelect').val();
+                var productId = $('#productSelect').val();
+
+                if (equipmentId && productId) {
+                    $.ajax({
+                        url: '@Url.Action("GetFilteredBatches")',
+                        type: 'GET',
+                        data: { equipmentId: equipmentId, productId: productId },
+                        success: function (data) {
+                            var $batchSelect = $('#batchSelect');
+                            $batchSelect.empty();
+                            $batchSelect.append('<option value="">-- Select Batch --</option>');
+                            $.each(data, function (index, item) {
+                                $batchSelect.append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#batchSelect').empty().append('<option value="">-- Select Batch --</option>');
+                }
+            });
+
+            // Update hidden field value on batch selection
+            $('#batchSelect').change(function () {
+                $('#batchId').val($(this).val());
+            });
+        });
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿@model BatchMonitoringSystem.ViewModels.AssignPermissionViewModel
+
+@{
+    ViewData["Title"] = "Assign Permissions";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-action="Assign" method="post">
+        <div class="form-group">
+            <label asp-for="SelectedRoleId" class="form-label">Role</label>
+            <select asp-for="SelectedRoleId" asp-items="@(new SelectList(Model.Roles ?? Enumerable.Empty<ApplicationRole>(), "Id", "Name"))" class="form-select">
+                <option value="">Select a role</option>
+            </select>
+            <span asp-validation-for="SelectedRoleId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SelectedPermissionIds" class="form-label">Permissions</label>
+            <select asp-for="SelectedPermissionIds" asp-items="@(new MultiSelectList(Model.Permissions ?? Enumerable.Empty<Permission>(), "PermissionId", "PermissionName"))" class="form-select" multiple="multiple">
+                <option value="">Select permissions</option>
+            </select>
+            <span asp-validation-for="SelectedPermissionIds" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Assign Permissions</button>
+        </div>
+    </form>
+</div>

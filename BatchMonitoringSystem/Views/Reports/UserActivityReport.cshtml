@@ -1,0 +1,54 @@
+﻿@using BatchMonitoringSystem.ViewModels
+@model UserActivityReportModel
+
+@{
+    ViewBag.Title = "User Activity Report";
+}
+
+<h2>User Activity Report</h2>
+
+<form method="get" class="row mb-4">
+    <div class="col-md-3 form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-3 form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-md-2 form-group">
+        <button type="submit" class="btn btn-success mt-4">Filter <i class="fa fa-filter"></i></button>
+    </div>
+    <div class="col-md-2 form-group">
+        <a href="@Url.Action("ExportUserActivitiesToExcel", "Reports", new { startDate = Model.StartDate, endDate = Model.EndDate })" class="btn btn-info mt-4">Export to Excel <i class="fa fa-file-excel"></i></a>
+    </div>
+</form>
+
+@if (Model.Activities.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User Id</th>
+                <th>Activity Type</th>
+                <th>Activity Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Model.Activities)
+            {
+                <tr>
+                    <td>@activity.Timestamp.ToString("MMM d, yyyy h:mm tt")</td>
+                     <td>@activity.UserName</td>
+                    <td>@activity.ActivityType</td>
+                    <td>@activity.ActivityDescription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No activities found for the selected date range.</p>
+}

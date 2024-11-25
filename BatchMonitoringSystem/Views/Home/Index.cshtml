@@ -1,0 +1,142 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Monitoring System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: url('https://via.placeholder.com/1920x600') no-repeat center center;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+            .hero-section h1 {
+                font-size: 3rem;
+            }
+
+            .hero-section p {
+                font-size: 1.25rem;
+            }
+
+        .card-deck .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+            .card-deck .card img {
+                border-bottom: 1px solid #e9ecef;
+            }
+
+        .card-deck .card-title {
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+ @if (SignInManager.IsSignedIn(User))
+    
+            {
+    <body>
+
+        <div class="container">
+            <main role="main" class="pb-3 mx-0">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="container">
+                        <h1>Welcome to Batch Monitoring System</h1>
+                        <p>Monitor and manage your batch processes efficiently with our advanced tools.</p>
+                      
+                    </div>
+                </section>
+            </main>
+        </div>
+
+
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+}else{
+   
+    <body>
+
+        <div class="container">
+            <main role="main" class="pb-3 mx-0">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="container">
+                        <h1>Welcome to Batch Monitoring System</h1>
+                        <p>Monitor and manage your batch processes efficiently with our advanced tools.</p>
+                        <a href="#features" class="btn btn-primary btn-lg">Explore Features</a>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section id="features" class="my-5">
+                    <div class="container">
+                        <h2 class="text-center mb-4">Our Key Features</h2>
+                        <div class="card-deck">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/500x300" class="card-img-top" alt="Feature 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Real-Time Monitoring</h5>
+                                    <p class="card-text">Keep track of your batches in real-time with our intuitive dashboard.</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img src="https://via.placeholder.com/500x300" class="card-img-top" alt="Feature 2">
+                                <div class="card-body">
+                                    <h5 class="card-title">Detailed Reporting</h5>
+                                    <p class="card-text">Generate comprehensive reports to analyze batch performance and trends.</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img src="https://via.placeholder.com/500x300" class="card-img-top" alt="Feature 3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Custom Alerts</h5>
+                                    <p class="card-text">Set up alerts for critical parameters to stay ahead of any issues.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact Section -->
+                <section class="my-5">
+                    <div class="container">
+                        <h2 class="text-center mb-4">Get in Touch</h2>
+                        <div class="text-center">
+                            <p>If you have any questions or need assistance, feel free to contact us.</p>
+                            <a href="mailto:support@example.com" class="btn btn-secondary btn-lg">Contact Us</a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+      
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+   
+
+}
+</html>

@@ -1,0 +1,83 @@
+﻿@using BatchMonitoringSystem.ViewModels
+@model BatchReportModel
+
+@{
+    ViewBag.Title = "Batch Report";
+}
+
+<h2>Batch Report</h2>
+
+<form method="get" class="row mb-4">
+    <div class="col">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col">
+        <button type="submit" class="btn btn-success mt-4">Filter <i class="fa fa-filter"></i></button>
+    </div>
+    <div class="col">
+        <a href="@Url.Action("ExportBatchesToExcel", "Reports", new { startDate = Model.StartDate, endDate = Model.EndDate })" class="btn btn-info mt-4">Export to Excel <i class="fa fa-file-excel"></i></a>
+    </div>
+</form>
+
+<h3>Batches</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Batch ID</th>
+                <th>Batch Name</th>
+                <th>Equipment Name</th>
+                <th>Product Name</th>
+                <th>Batch Start Time</th>
+                <th>Batch End Time</th>
+                <th>Comments</th>
+                <th>Batch Status</th>
+                <th>Parameters</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var batch in Model.Batches)
+            {
+                <tr>
+                    <td>@batch.BatchId</td>
+                    <td>@batch.BatchName</td>
+                    <td>@batch.EquipmentName</td>
+                    <td>@batch.ProductName</td>
+                    <td>@batch.BatchStartTime.ToString("yyyy-MM-dd")</td>
+                    <td>@batch.BatchEndTime.ToString("yyyy-MM-dd")</td>
+                    <td>@batch.Comments</td>
+                    <td>@batch.BatchStatus</td>
+                    <td>
+                        <ul>
+                            @foreach (var parameter in batch.BatchParameters)
+                            {
+                                <li>
+                                    @parameter.ParameterName:
+                                    @foreach (var value in parameter.ActualValues)
+                                    {
+                                        <span>@value</span>
+                                        @if (value != parameter.ActualValues.Last())
+                                        {
+                                            <span>, </span>
+                                        }
+                                    }
+                                    (Min: @parameter.MinValue, Max: @parameter.MaxValue, Within range: @parameter.IsWithinRange)
+                                </li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Batches.Any())
+{
+    <p>No batches found.</p>
+}
